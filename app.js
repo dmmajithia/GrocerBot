@@ -14,6 +14,7 @@ var config = {
 firebase.initializeApp(config);
 
 var database = firebase.database();
+var senderId;
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: false}));
@@ -57,7 +58,7 @@ app.post("/webhook", function (req, res) {
 });
 
 function processPostback(event) {
-  var senderId = event.sender.id;
+  senderId = event.sender.id;
   var payload = event.postback.payload;
 
   if (payload === "Greeting") {
