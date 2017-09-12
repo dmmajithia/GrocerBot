@@ -80,7 +80,7 @@ function processPostback(event) {
         name = bodyObj.first_name;
         greeting = "Hi " + name + ". ";
       }
-      database.ref("users/{senderId}").set(name);
+      database.ref("users/"+senderId).set(name);
       var message = greeting + "My name is Grocer. I can keep track of your groceries. What does your kitchen have today? Or should we start off with a grocery list?";
       sendMessage(senderId, {text: message});
     });
