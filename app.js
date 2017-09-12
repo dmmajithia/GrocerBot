@@ -1,6 +1,19 @@
 var express = require("express");
 var request = require("request");
 var bodyParser = require("body-parser");
+var firebase = require("firebase");
+
+var config = {
+    apiKey: "AIzaSyAGOmtumitVr5RUdTVn5tFFN1nvH0DKA4U",
+    authDomain: "grocerbot.firebaseapp.com",
+    databaseURL: "https://grocerbot.firebaseio.com",
+    projectId: "grocerbot",
+    storageBucket: "",
+    messagingSenderId: "416200240219"
+  };
+firebase.initializeApp(config);
+
+var database = firebase.database();
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: false}));
@@ -66,6 +79,7 @@ function processPostback(event) {
         name = bodyObj.first_name;
         greeting = "Hi " + name + ". ";
       }
+      database.ref("users/{senderId}").set(name);
       var message = greeting + "My name is Grocer. I can keep track of your groceries. What does your kitchen have today? Or should we start off with a grocery list?";
       sendMessage(senderId, {text: message});
     });
