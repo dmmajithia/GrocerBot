@@ -102,7 +102,7 @@ function processPostback(event) {
             };
 
       //var message = greeting + "My name is Grocer. I can keep track of your groceries - I will send you daily reminders of what is in your kitchen. What does your kitchen have today? Or should we start off with a grocery list?";
-      sendMessage(senderId, {text: message});
+      sendMessage(senderId, message);
     });
   }
 }
