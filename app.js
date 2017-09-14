@@ -124,7 +124,7 @@ function processQuickReply(userID, payload){
       				{
         				content_type:"text",
         				title:"Add new groceries",
-        				payload:"setup-finish"
+        				payload:"add"
       				},
       				{	
       					content_type:"text",
@@ -148,10 +148,10 @@ function processQuickReply(userID, payload){
 			case "show-list":
 				database.ref("items/"+userID).once('value').then(function(snapshot) {
 					var list = snapshot.val();
-					var listText, i = 0;
+					var listText = "", i = 0;
 					for(index in list){
 						i += 1;
-						listText += i.toString() + ". " + list[index];
+						listText += i.toString() + ". " + list[index] + "\n";
 					}
 					message = {
 						text: listText,
@@ -180,6 +180,37 @@ function processQuickReply(userID, payload){
 					}
 					sendMessage(userID, message);
 				});
+			break;
+			case "add":
+				sendMessage(userID, bot.addMultiple(userID));
+			break;
+			case "add-finish":
+				message = {
+						text: "Gotcha " + name + " !",
+						quick_replies:[
+      				{
+        				content_type:"text",
+        				title:"Add new groceries",
+        				payload:"setup-finish"
+      				},
+      				{	
+      					content_type:"text",
+      					title:"Show my groceries",
+      					payload:"show-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"shopping list",
+      					payload:"shopping-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Help",
+      					payload:"help"
+      				}
+    				]
+					}
+					sendMessage(userID, message);
 			break;
 			case "help":
 

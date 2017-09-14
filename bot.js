@@ -33,6 +33,25 @@ exports.setup = function(userID) {
 		}
 }
 
+exports.addMultiple = function(userID) {
+	databse.ref("userData/"+userID+"/status").set("add");
+	return {
+			text: "Tell me what groceries are in your kitchen, one item at a time",
+			quick_replies:[
+      		{
+        		content_type:"text",
+        		title:"Done",
+        		payload:"add-finish"
+      		},
+      		{
+      			content_type:"text",
+      			title:"Help",
+      			payload:"help"
+      		}
+    		]
+		}
+}
+
 exports.processMessage = function(userID, message) {
 
 	database.ref("userData/"+userID).once('value').then(function(snapshot) {
