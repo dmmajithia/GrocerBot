@@ -159,7 +159,7 @@ function processQuickReply(userID, payload){
       				{
         				content_type:"text",
         				title:"Add new groceries",
-        				payload:"setup-finish"
+        				payload:"add"
       				},
       				{	
       					content_type:"text",
@@ -191,7 +191,7 @@ function processQuickReply(userID, payload){
       				{
         				content_type:"text",
         				title:"Add new groceries",
-        				payload:"setup-finish"
+        				payload:"add"
       				},
       				{	
       					content_type:"text",
