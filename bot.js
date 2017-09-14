@@ -45,22 +45,22 @@ exports.processMessage = function(userID, message) {
   			return {
   				text: count.toString() + ". " + item,
   				quick_replies:[
-      		{
+      			{
         		content_type:"text",
         		title:"Done",
         		payload:"setup-finish"
-      		},
-      		{
+      			},
+      			{	
       			content_type:"text",
       			title:"Show my groceries",
       			payload:"show-list"
-      		}
-      		{
+      			},
+      			{
       			content_type:"text",
       			title:"Help",
       			payload:"help"
-      		}
-    		]
+      			}
+    			]
   			}
   		}
 	});
