@@ -34,7 +34,7 @@ exports.setup = function(userID) {
 }
 
 exports.addMultiple = function(userID) {
-	databse.ref("userData/"+userID+"/status").set("add");
+	database.ref("userData/"+userID+"/status").set("add");
 	return {
 			text: "Tell me what groceries are in your kitchen, one item at a time",
 			quick_replies:[
