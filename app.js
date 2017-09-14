@@ -153,7 +153,7 @@ function processQuickReply(userID, payload){
 						listText += i.toString() + ". " + list[index];
 					}
 					message = {
-						text: listText;
+						text: listText,
 						quick_replies:[
       				{
         				content_type:"text",
