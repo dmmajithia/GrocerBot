@@ -77,7 +77,7 @@ function processMessage(event){
   				database.ref("items/"+userID).child(count).set(item);
   				database.ref("userData/"+userID+"/count").set(count);
   				var returnMessage = {
-  					text: item,
+  					text: count.toString() + ". " + item,
   					quick_replies:[
       				{
         				content_type:"text",
