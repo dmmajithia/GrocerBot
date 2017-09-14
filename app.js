@@ -2,7 +2,6 @@ var express = require("express");
 var request = require("request");
 var bodyParser = require("body-parser");
 var firebase = require("firebase");
-var bot = require("./bot");
 
 var config = {
     apiKey: "AIzaSyAGOmtumitVr5RUdTVn5tFFN1nvH0DKA4U",
@@ -17,6 +16,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var senderId;
 
+var bot = require("./bot");
 var app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
