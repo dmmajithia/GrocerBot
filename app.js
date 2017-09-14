@@ -53,7 +53,8 @@ app.post("/webhook", function (req, res) {
         }
         else if (event.text) {
       	  var text = event.text.toLowerCase().trim();
-      	  bot.processMessage(senderId, text);
+      	  var senderId = event.sender.id;
+      	  processMessage(senderId, text);
       	}
       });
     });
@@ -61,6 +62,10 @@ app.post("/webhook", function (req, res) {
     res.sendStatus(200);
   }
 });
+
+function processMessage(senderId, text){
+	sendMessage(senderId, bot.processMessage(senderId, text));
+}
 
 function processPostback(event) {
   senderId = event.sender.id;
