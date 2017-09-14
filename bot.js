@@ -42,6 +42,7 @@ exports.processMessage = function(userID, message) {
   			var item = message
   			count += 1;
   			database.ref("items/"+userID).child(count).set(item);
+  			database.ref("userData/"+userID+"count").set(count);
   			return {
   				text: count.toString() + ". " + item,
   				quick_replies:[

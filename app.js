@@ -51,10 +51,8 @@ app.post("/webhook", function (req, res) {
         if (event.postback) {
           processPostback(event);
         }
-        else if (event.message && !event.message.is_echo) {
-      	  var text = event.message.text.toLowerCase().trim();
-      	  var senderId = event.sender.id;
-      	  processMessage(senderId, text);
+        else if (event.message) {
+        	processMessage(event);
       	}
       });
     });
@@ -63,8 +61,16 @@ app.post("/webhook", function (req, res) {
   }
 });
 
-function processMessage(senderId, text){
-	sendMessage(senderId, bot.processMessage(senderId, text));
+function processMessage(event){
+	if (!event.message.is_echo) {
+    	var message = event.message;
+    	var senderId = event.sender.id;
+    	// You may get a text or attachment but not both
+    	if (message.text) {
+      		var text = message.text.toLowerCase().trim();
+			sendMessage(senderId, bot.processMessage(senderId, text));
+		}
+	}
 }
 
 function processPostback(event) {
