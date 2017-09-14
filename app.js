@@ -51,7 +51,7 @@ app.post("/webhook", function (req, res) {
         if (event.postback) {
           processPostback(event);
         }
-        else if (event.text) {
+        else if (event.message.text) {
       	  var text = event.text.toLowerCase().trim();
       	  var senderId = event.sender.id;
       	  processMessage(senderId, text);
