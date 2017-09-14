@@ -96,7 +96,7 @@ function processMessage(event){
       				}
     				]
   				}
-  				sendMessage(userID, message);
+  				sendMessage(userID, returnMessage);
   			}
 		});
 		}
