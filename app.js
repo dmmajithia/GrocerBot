@@ -67,13 +67,12 @@ function processMessage(event){
     	var userID = event.sender.id;
     	// You may get a text or attachment but not both
     	if (message.text) {
-      		var text = message.text.toLowerCase().trim();
+      		var item = message.text.toLowerCase().trim();
 
       		database.ref("userData/"+userID).once('value').then(function(snapshot) {
   			var status = snapshot.val().status;
   			var count = snapshot.val().count;
   			if(status === "setup"){
-  				var item = message
   				count += 1;
   				database.ref("items/"+userID).child(count).set(item);
   				database.ref("userData/"+userID+"/count").set(count);
