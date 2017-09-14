@@ -67,12 +67,12 @@ function processMessage(event){
     	var userID = event.sender.id;
     	// You may get a text or attachment but not both
     	console.log(message);
-    	/*if (message.quick_reply.payload) {
+    	if (message.quick_reply.payload) {
     		processQuickReply(userID, message.quick_reply.payload);
     		return;
-    	}*/
+    	}
 
-    	 if (message.text) {
+    	 else if (message.text) {
       		var item = message.text.toLowerCase().trim();
 
       		database.ref("userData/"+userID).once('value').then(function(snapshot) {
@@ -116,7 +116,7 @@ function processQuickReply(userID, payload){
 		switch (payload) {
 			case "setup-finish":
 				//change status to idle in database
-				database.ref("status/"+userID).set("idle");
+				database.ref("userData/"+userID+"/status").set("idle");
 				//send idle message
 				message = {
 					text: name + ", pat yourself for taking the first step towards healthy living!\nTo add or remove an item, type 'add/remove eggs'.\nTo make a shopping list, type 'shopping list'.\nNow, its time for some ice cream!",
