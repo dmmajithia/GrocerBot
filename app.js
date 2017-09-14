@@ -66,6 +66,11 @@ function processMessage(event){
     	var message = event.message;
     	var userID = event.sender.id;
     	// You may get a text or attachment but not both
+    	if (message.quick_replies) {
+    		processQuickReply(userID, message.quick_replies[0].payload);
+    		return;
+    	}
+
     	if (message.text) {
       		var item = message.text.toLowerCase().trim();
 
@@ -101,6 +106,86 @@ function processMessage(event){
 		});
 		}
 	}
+}
+
+function processQuickReply(userID, payload){
+	var message = {};
+	database.ref("users/"+userID).once('value').then(function(snapshot) {
+		var name = snapshot.val();
+		switch (payload) {
+			case "setup-finish":
+				//change status to idle in database
+				database.ref("status/"+userID).set("idle");
+				//send idle message
+				message = {
+					text: name + ", pat yourself for taking the first step towards healthy living!\nTo add or remove an item, type 'add/remove eggs'.\nTo make a shopping list, type 'shopping list'.\nNow, its time for some ice cream!",
+					quick_replies:[
+      				{
+        				content_type:"text",
+        				title:"Add new groceries",
+        				payload:"setup-finish"
+      				},
+      				{	
+      					content_type:"text",
+      					title:"Show my groceries",
+      					payload:"show-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"shopping list",
+      					payload:"shopping-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Help",
+      					payload:"help"
+      				}
+    				]
+				}
+				sendMessage(userID,message);
+			break;
+			case "show-list":
+				database.ref("items/"+userID).once('value').then(function(snapshot) {
+					var list = snapshot.val();
+					var listText, i = 0;
+					for(index in list){
+						i += 1;
+						listText += i.toString() + ". " + list[index];
+					}
+					message = {
+						text: listText;
+						quick_replies:[
+      				{
+        				content_type:"text",
+        				title:"Add new groceries",
+        				payload:"setup-finish"
+      				},
+      				{	
+      					content_type:"text",
+      					title:"Show my groceries",
+      					payload:"show-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"shopping list",
+      					payload:"shopping-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Help",
+      					payload:"help"
+      				}
+    				]
+					}
+					sendMessage(userID, message);
+				});
+			break;
+			case "help":
+
+			break;
+			default:
+		}
+	});
 }
 
 function processPostback(event) {
