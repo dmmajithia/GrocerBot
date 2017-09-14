@@ -42,27 +42,27 @@ exports.processMessage = function(userID, message) {
   			var item = message
   			count += 1;
   			database.ref("items/"+userID).child(count).set(item);
-  			database.ref("userData/"+userID+"count").set(count);
+  			database.ref("userData/"+userID+"/count").set(count);
   			return {
-  				text: count.toString() + ". " + item,
-  				quick_replies:[
-      			{
-        		content_type:"text",
-        		title:"Done",
-        		payload:"setup-finish"
-      			},
-      			{	
-      			content_type:"text",
-      			title:"Show my groceries",
-      			payload:"show-list"
-      			},
-      			{
-      			content_type:"text",
-      			title:"Help",
-      			payload:"help"
-      			}
-    			]
-  			}
+  					text: count.toString() + ". " + item,
+  					quick_replies:[
+      				{
+        				content_type:"text",
+        				title:"Done",
+        				payload:"setup-finish"
+      				},
+      				{	
+      					content_type:"text",
+      					title:"Show my groceries",
+      					payload:"show-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Help",
+      					payload:"help"
+      				}
+    				]
+  				}
   		}
 	});
 }

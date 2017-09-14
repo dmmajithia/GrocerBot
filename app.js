@@ -64,11 +64,42 @@ app.post("/webhook", function (req, res) {
 function processMessage(event){
 	if (!event.message.is_echo) {
     	var message = event.message;
-    	var senderId = event.sender.id;
+    	var userID = event.sender.id;
     	// You may get a text or attachment but not both
     	if (message.text) {
       		var text = message.text.toLowerCase().trim();
-			sendMessage(senderId, bot.processMessage(senderId, text));
+
+      		database.ref("userData/"+userID).once('value').then(function(snapshot) {
+  			var status = snapshot.val().status;
+  			var count = snapshot.val().count;
+  			if(status === "setup"){
+  				var item = message
+  				count += 1;
+  				database.ref("items/"+userID).child(count).set(item);
+  				database.ref("userData/"+userID+"/count").set(count);
+  				var returnMessage = {
+  					text: count.toString() + ". " + item,
+  					quick_replies:[
+      				{
+        				content_type:"text",
+        				title:"Done",
+        				payload:"setup-finish"
+      				},
+      				{	
+      					content_type:"text",
+      					title:"Show my groceries",
+      					payload:"show-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Help",
+      					payload:"help"
+      				}
+    				]
+  				}
+  				sendMessage(userID, message);
+  			}
+		});
 		}
 	}
 }
