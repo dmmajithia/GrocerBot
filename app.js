@@ -66,7 +66,7 @@ function processMessage(event){
     	var message = event.message;
     	var userID = event.sender.id;
     	// You may get a text or attachment but not both
-    	if (message.quick_reply) {
+    	if (message.quick_reply.payload) {
     		processQuickReply(userID, message.quick_reply[0].payload);
     		return;
     	}
