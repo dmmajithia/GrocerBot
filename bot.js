@@ -14,15 +14,54 @@ var database = firebase.database();
 
 exports.setup = function(userID) {
 	//first add state to data
-	database.ref("status/"+userID).set("setup");
+	database.ref("userData/"+userID+"/status/").set("setup");
+	database.ref("userData/"+userID+"/count/").set(0);
 	return {
 			text: "Tell me what groceries are in your kitchen",
 			quick_replies:[
       		{
         		content_type:"text",
-        		title:"That is all in my kitchen",
+        		title:"Done",
         		payload:"setup-finish"
+      		},
+      		{
+      			content_type:"text",
+      			title:"Help",
+      			payload:"help"
       		}
     		]
 		}
+}
+
+exports.processMessage = function(userID, message) {
+
+	database.ref("userData/"+userID).once('value').then(function(snapshot) {
+  		var status = snapshot.val().status;
+  		var count = snapshot.val().count;
+  		if(status === "setup"){
+  			var item = message
+  			count += 1;
+  			database.ref("items/"+userID).child(count).set(item);
+  			return {
+  				text: count.toString() + ". " + item,
+  				quick_replies:[
+      		{
+        		content_type:"text",
+        		title:"Done",
+        		payload:"setup-finish"
+      		},
+      		{
+      			content_type:"text",
+      			title:"Show my groceries",
+      			payload:"show-list"
+      		}
+      		{
+      			content_type:"text",
+      			title:"Help",
+      			payload:"help"
+      		}
+    		]
+  			}
+  		}
+	});
 }
