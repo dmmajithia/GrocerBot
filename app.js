@@ -52,7 +52,7 @@ app.post("/webhook", function (req, res) {
           processPostback(event);
         }
         else if (event.message && !event.message.is_echo) {
-      	  var text = event.message.toLowerCase().trim();
+      	  var text = event.message.text.toLowerCase().trim();
       	  var senderId = event.sender.id;
       	  processMessage(senderId, text);
       	}
