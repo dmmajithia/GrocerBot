@@ -90,10 +90,26 @@ function processMessage(event){
         				title:"Done",
         				payload:"setup-finish"
       				},
-      				{	
+      				{
       					content_type:"text",
-      					title:"Show my groceries",
-      					payload:"show-list"
+      					title:"Help",
+      					payload:"help"
+      				}
+    				]
+  				}
+  				sendMessage(userID, returnMessage);
+  			}
+  			else if (status === "add"){
+  				count += 1;
+  				database.ref("items/"+userID).child(count).set(item);
+  				database.ref("userData/"+userID+"/count").set(count);
+  				var returnMessage = {
+  					text: count.toString() + ". " + item,
+  					quick_replies:[
+      				{
+        				content_type:"text",
+        				title:"Done",
+        				payload:"add-finish"
       				},
       				{
       					content_type:"text",
