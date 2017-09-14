@@ -67,12 +67,12 @@ function processMessage(event){
     	var userID = event.sender.id;
     	// You may get a text or attachment but not both
     	console.log(message);
-    	if (message.quick_reply.payload) {
+    	/*if (message.quick_reply.payload) {
     		processQuickReply(userID, message.quick_reply.payload);
     		return;
-    	}
+    	}*/
 
-    	if (message.text) {
+    	 if (message.text) {
       		var item = message.text.toLowerCase().trim();
 
       		database.ref("userData/"+userID).once('value').then(function(snapshot) {
@@ -252,6 +252,22 @@ function sendMessage(recipientId, message) {
     json: {
       recipient: {id: recipientId},
       message: message,
+    }
+  }, function(error, response, body) {
+    if (error) {
+      console.log("Error sending message: " + response.error);
+    }
+  });
+}
+// send typing indicator
+function typing(userID){
+	request({
+    url: "https://graph.facebook.com/v2.6/me/messages",
+    qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
+    method: "POST",
+    json: {
+      recipient: {id: recipientId},
+      sender_action: "typing_on",
     }
   }, function(error, response, body) {
     if (error) {
