@@ -2,6 +2,7 @@ var express = require("express");
 var request = require("request");
 var bodyParser = require("body-parser");
 var firebase = require("firebase");
+var bot = require("./bot");
 
 var config = {
     apiKey: "AIzaSyAGOmtumitVr5RUdTVn5tFFN1nvH0DKA4U",
@@ -104,6 +105,10 @@ function processPostback(event) {
       //var message = greeting + "My name is Grocer. I can keep track of your groceries - I will send you daily reminders of what is in your kitchen. What does your kitchen have today? Or should we start off with a grocery list?";
       sendMessage(senderId, message);
     });
+  }
+
+  else if (payload === "setup"){
+  		sendMessage(senderId, bot.setup(senderId));
   }
 }
 
