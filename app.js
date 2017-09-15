@@ -299,6 +299,7 @@ function processPostback(event) {
 function processText(userID, message, count) {
 	console.log("PROCESS TEXT FROM 11111!!!!");
 	// when status is idle
+	console.log(message);
 	if (message.indexOf("add") === 1){
 		console.log("PROCESS TEXT FROM 22222!!!!");
 		// add item/s
