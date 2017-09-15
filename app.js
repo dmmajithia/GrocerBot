@@ -310,7 +310,7 @@ function processText(userID, message, count) {
 		var text = "";
 		for (item in list){
 			count += 1;
-			database.ref("items/"+userID).child(count).set(item);
+			database.ref("items/"+userID).child(count).set(list[item]);
 			text += count.toString() + ". " + item + "\n";
 		}
 		database.ref("userData/"+userID+"/count").set(count);
