@@ -48,7 +48,6 @@ app.post("/webhook", function (req, res) {
     req.body.entry.forEach(function(entry) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
-      	typing(event.sender.id);
         if (event.postback) {
           processPostback(event);
         }
@@ -66,6 +65,7 @@ function processMessage(event){
 	if (!event.message.is_echo) {
     	var message = event.message;
     	var userID = event.sender.id;
+    	typing(userID);
     	// You may get a text or attachment but not both
     	console.log(message);
     	if (message.hasOwnProperty("quick_reply")) {
