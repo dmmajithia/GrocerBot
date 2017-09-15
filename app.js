@@ -16,7 +16,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var senderId;
 
-var quick_replies = [
+var quickReplies = [
       				{
         				content_type:"text",
         				title:"Add",
