@@ -271,6 +271,10 @@ function processText(userID, message, count) {
 		message = message.replace("add", " ").trim();
 		console.log(message);
 		var list = message.split(',');
+		if (!list[0]){
+			sendMessage(userID, {text: "Type 'add salad, ...'", quick_replies: quickReplies});
+			return;
+		}
 		console.log(list);
 		var text = "";
 		for (item in list){
