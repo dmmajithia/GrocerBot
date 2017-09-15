@@ -303,8 +303,10 @@ function processText(userID, message, count) {
 	if (message.indexOf("add") === 0){
 		console.log("PROCESS TEXT FROM 22222!!!!");
 		// add item/s
-		message = message.replace("add", "").trim();
-		var list = message.split(",");
+		message = message.replace("add", " ").trim();
+		console.log(message);
+		var list = message.split(',');
+		console.log(list);
 		var text = "";
 		for (item in list){
 			count += 1;
