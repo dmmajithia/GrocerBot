@@ -16,6 +16,29 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var senderId;
 
+var quick_replies = [
+      				{
+        				content_type:"text",
+        				title:"Add",
+        				payload:"add"
+      				},
+      				{	
+      					content_type:"text",
+      					title:"Show my groceries",
+      					payload:"show-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Buy",
+      					payload:"shopping-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Help",
+      					payload:"help"
+      				}
+    				];
+
 var bot = require("./bot");
 var app = express();
 app.use(bodyParser.urlencoded({extended: false}));
@@ -140,29 +163,8 @@ function processQuickReply(userID, payload){
 				database.ref("userData/"+userID+"/status").set("idle");
 				//send idle message
 				message = {
-					text: name + ", pat yourself for taking the first step towards healthy living!\nTo add or remove an item, type 'add/remove eggs'.\nTo make a shopping list, type 'shopping list'.\nNow, its time for some ice cream!",
-					quick_replies:[
-      				{
-        				content_type:"text",
-        				title:"Add new groceries",
-        				payload:"add"
-      				},
-      				{	
-      					content_type:"text",
-      					title:"Show my groceries",
-      					payload:"show-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"shopping list",
-      					payload:"shopping-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"Help",
-      					payload:"help"
-      				}
-    				]
+					text: name + ", pat yourself for taking the first step towards healthy living!\nTo add or remove an item, type 'add/remove eggs'.\nTo make a shopping list, type 'buy eggs'.\nNow, its time for some ice cream!",
+					quick_replies: quickReplies
 				}
 				sendMessage(userID,message);
 			break;
@@ -176,61 +178,24 @@ function processQuickReply(userID, payload){
 					}
 					message = {
 						text: listText,
-						quick_replies:[
-      				{
-        				content_type:"text",
-        				title:"Add new groceries",
-        				payload:"add"
-      				},
-      				{	
-      					content_type:"text",
-      					title:"Show my groceries",
-      					payload:"show-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"shopping list",
-      					payload:"shopping-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"Help",
-      					payload:"help"
-      				}
-    				]
+						quick_replies:quickReplies
 					}
 					sendMessage(userID, message);
 				});
 			break;
 			case "add":
-				sendMessage(userID, bot.addMultiple(userID));
+				message = {
+						text: "Type 'add salad, ...'",
+						quick_replies:quickReplies
+					}
+					sendMessage(userID, message);
+				//sendMessage(userID, bot.addMultiple(userID));
 			break;
 			case "add-finish":
 				database.ref("userData/"+userID+"/status").set("idle");
 				message = {
 						text: "Gotcha " + name + " !",
-						quick_replies:[
-      				{
-        				content_type:"text",
-        				title:"Add new groceries",
-        				payload:"add"
-      				},
-      				{	
-      					content_type:"text",
-      					title:"Show my groceries",
-      					payload:"show-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"shopping list",
-      					payload:"shopping-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"Help",
-      					payload:"help"
-      				}
-    				]
+						quick_replies:quickReplies
 					}
 					sendMessage(userID, message);
 			break;
@@ -279,8 +244,8 @@ function processPostback(event) {
                       payload: "setup"
                     }, {
                       type: "postback",
-                      title: "Make a shopping list",
-                      payload: "shopping list"
+                      title: "Make a Buy",
+                      payload: "Buy"
                     }]
                 }
               }
@@ -316,28 +281,7 @@ function processText(userID, message, count) {
 		database.ref("userData/"+userID+"/count").set(count);
 		var msg = {
 						text: text,
-						quick_replies:[
-      				{
-        				content_type:"text",
-        				title:"Add new groceries",
-        				payload:"add"
-      				},
-      				{	
-      					content_type:"text",
-      					title:"Show my groceries",
-      					payload:"show-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"shopping list",
-      					payload:"shopping-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"Help",
-      					payload:"help"
-      				}
-    				]
+						quick_replies:quickReplies
 				};
 		sendMessage(userID, msg);
 
@@ -379,28 +323,7 @@ function processText(userID, message, count) {
 			database.ref("items/"+userID).set(currentList);
 			var msg = {
 						text: text,
-						quick_replies:[
-      				{
-        				content_type:"text",
-        				title:"Add new groceries",
-        				payload:"add"
-      				},
-      				{	
-      					content_type:"text",
-      					title:"Show my groceries",
-      					payload:"show-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"shopping list",
-      					payload:"shopping-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"Help",
-      					payload:"help"
-      				}
-    				]
+						quick_replies:quickReplies
 				};
 			sendMessage(userID, msg);
 		});
