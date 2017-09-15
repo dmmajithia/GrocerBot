@@ -200,7 +200,8 @@ function processQuickReply(userID, payload){
 					sendMessage(userID, message);
 			break;
 			case "help":
-
+				var msg = "'add ramen, ...'\n'remove ramen, ...'\n'buy ramen, ...' for shopping list\n'dump ramen, ...' to delete from shopping list\n'buy what' to view your shpping list";
+				sendMessage(userID, {text:msg, quick_replies: quickReplies });
 			break;
 			default:
 		}
