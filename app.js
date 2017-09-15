@@ -363,7 +363,7 @@ function processText(userID, message, count) {
 					if(currentList[list[item]]){
 						// item is a number
 						count -= 1;
-						delete currentList[list[item];
+						delete currentList[list[item]];
 					}
 				}
 			}
