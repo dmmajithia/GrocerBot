@@ -293,6 +293,12 @@ function processText(userID, message, count) {
 	else if (message.indexOf("remove") === 0){
 		console.log("PROCESS TEXT FROM 333333!!!!");
 		// remove item
+		message = message.replace("remove", "").trim();
+		var list = message.split(",");
+		if (!list[0]){
+			sendMessage(userID, {text: "Type 'add salad, ...'", quick_replies: quickReplies});
+			return;
+		}
 		database.ref("items/"+userID).once('value').then(function(snapshot) {
 			message = message.replace("remove", "").trim();
 			var list = message.split(",");
