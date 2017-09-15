@@ -311,7 +311,7 @@ function processText(userID, message, count) {
 		for (item in list){
 			count += 1;
 			database.ref("items/"+userID).child(count).set(list[item]);
-			text += count.toString() + ". " + item + "\n";
+			text += count.toString() + ". " + list[item] + "\n";
 		}
 		database.ref("userData/"+userID+"/count").set(count);
 		var msg = {
@@ -350,20 +350,20 @@ function processText(userID, message, count) {
 			var list = message.split(",");
 			var currentList = snapshot.val();
 			for (item in list){
-				if (isNaN(item)){
+				if (isNaN(list[item])){
 					// item is a string
 					for (index in currentList){
-						if (currentList[index] === item){
+						if (currentList[index] === list[item]){
 							count -= 1;
 							delete currentList[index];
 						}
 					}
 				}
 				else{
-					if(currentList[item]){
+					if(currentList[list[item]]){
 						// item is a number
 						count -= 1;
-						delete currentList[item];
+						delete currentList[list[item];
 					}
 				}
 			}
