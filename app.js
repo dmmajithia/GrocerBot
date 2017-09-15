@@ -367,6 +367,7 @@ function processText(userID, message, count) {
 					}
 				}
 			}
+			database.ref("userData/"+userID+"/count").set(count);
 			//now reorder the currentList
 			var index = 0;
 			var text = "";
