@@ -65,7 +65,7 @@ function processMessage(event){
 	if (!event.message.is_echo) {
     	var message = event.message;
     	var userID = event.sender.id;
-    	typing(userID);
+    	//typing(userID);
     	// You may get a text or attachment but not both
     	console.log(message);
     	if (message.hasOwnProperty("quick_reply")) {
@@ -122,6 +122,7 @@ function processMessage(event){
   				sendMessage(userID, returnMessage);
   			}
   			else if (status === "idle"){
+  				console.log("PROCESS TEXT FROM HERE!!!!");
   				processText(userID, item, count);
   			}
 		});
@@ -296,9 +297,10 @@ function processPostback(event) {
 }
 
 function processText(userID, message, count) {
-
+	console.log("PROCESS TEXT FROM 11111!!!!");
 	// when status is idle
 	if (message.indexOf("add") === 1){
+		console.log("PROCESS TEXT FROM 22222!!!!");
 		// add item/s
 		message = message.replace("add", "").trim();
 		var list = message.split(",");
@@ -338,6 +340,7 @@ function processText(userID, message, count) {
 
 	}
 	else if (message.indexOf("remove") === 1){
+		console.log("PROCESS TEXT FROM 333333!!!!");
 		// remove item
 		database.ref("items/"+userID).once('value').then(function(snapshot) {
 			message = message.replace("remove", "").trim();
