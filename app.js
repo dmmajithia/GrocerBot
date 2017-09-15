@@ -48,6 +48,7 @@ app.post("/webhook", function (req, res) {
     req.body.entry.forEach(function(entry) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
+      	typing(event.sender.id);
         if (event.postback) {
           processPostback(event);
         }
@@ -119,6 +120,9 @@ function processMessage(event){
     				]
   				}
   				sendMessage(userID, returnMessage);
+  			}
+  			else if (status === "idle"){
+  				processText(userID, item, count);
   			}
 		});
 		}
@@ -201,6 +205,7 @@ function processQuickReply(userID, payload){
 				sendMessage(userID, bot.addMultiple(userID));
 			break;
 			case "add-finish":
+				database.ref("userData/"+userID+"/status").set("idle");
 				message = {
 						text: "Gotcha " + name + " !",
 						quick_replies:[
@@ -288,6 +293,112 @@ function processPostback(event) {
   else if (payload === "setup"){
   		sendMessage(senderId, bot.setup(senderId));
   }
+}
+
+function processText(userID, message, count) {
+
+	// when status is idle
+	if (message.indexOf("add") === 1){
+		// add item/s
+		message = message.replace("add", "").trim();
+		var list = message.split(",");
+		var text = "";
+		for (item in list){
+			count += 1;
+			database.ref("items/"+userID).child(count).set(item);
+			text += count.toString() + ". " + item + "\n";
+		}
+		database.ref("userData/"+userID+"/count").set(count);
+		var msg = {
+						text: text,
+						quick_replies:[
+      				{
+        				content_type:"text",
+        				title:"Add new groceries",
+        				payload:"add"
+      				},
+      				{	
+      					content_type:"text",
+      					title:"Show my groceries",
+      					payload:"show-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"shopping list",
+      					payload:"shopping-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Help",
+      					payload:"help"
+      				}
+    				]
+				};
+		sendMessage(userID, msg);
+
+	}
+	else if (message.indexOf("remove") === 1){
+		// remove item
+		database.ref("items/"+userID).once('value').then(function(snapshot) {
+			message = message.replace("remove", "").trim();
+			var list = message.split(",");
+			var currentList = snapshot.val();
+			for (item in list){
+				if (isNaN(item)){
+					// item is a string
+					for (index in currentList){
+						if (currentList[index] === item){
+							count -= 1;
+							delete currentList[index];
+						}
+					}
+				}
+				else{
+					if(currentList[item]){
+						// item is a number
+						count -= 1;
+						delete currentList[item];
+					}
+				}
+			}
+			//now reorder the currentList
+			var index = 0;
+			var text = "";
+			for (num in currentList){
+				index += 1;
+				currentList[index] = currentList[num];
+				text += index.toString() + ". " + currentList[num] + "\n";
+			}
+			database.ref("items/"+userID).set(currentList);
+			var msg = {
+						text: text,
+						quick_replies:[
+      				{
+        				content_type:"text",
+        				title:"Add new groceries",
+        				payload:"add"
+      				},
+      				{	
+      					content_type:"text",
+      					title:"Show my groceries",
+      					payload:"show-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"shopping list",
+      					payload:"shopping-list"
+      				},
+      				{
+      					content_type:"text",
+      					title:"Help",
+      					payload:"help"
+      				}
+    				]
+				};
+			sendMessage(userID, msg);
+		});
+	}
+
 }
 
 // sends message to user

@@ -52,36 +52,29 @@ exports.addMultiple = function(userID) {
 		}
 }
 
-exports.processMessage = function(userID, message) {
+exports.processMessage = function(userID, message, count) {
 
-	database.ref("userData/"+userID).once('value').then(function(snapshot) {
-  		var status = snapshot.val().status;
-  		var count = snapshot.val().count;
-  		if(status === "setup"){
-  			var item = message
-  			count += 1;
-  			database.ref("items/"+userID).child(count).set(item);
-  			database.ref("userData/"+userID+"/count").set(count);
-  			return {
-  					text: count.toString() + ". " + item,
-  					quick_replies:[
-      				{
-        				content_type:"text",
-        				title:"Done",
-        				payload:"setup-finish"
-      				},
-      				{	
-      					content_type:"text",
-      					title:"Show my groceries",
-      					payload:"show-list"
-      				},
-      				{
-      					content_type:"text",
-      					title:"Help",
-      					payload:"help"
-      				}
-    				]
-  				}
-  		}
-	});
+	// when status is idle
+	if (message.indexOf("add") === 1){
+		// add item/s
+		message = message.replace("add", "").trim();
+		var list = message.split(",");
+		var text = "";
+		for (item in list){
+			count += 1;
+			database.ref("items/"+userID).child(count).set(item);
+			text += count.toString() + ". " + item + "\n";
+		}
+		database.ref("userData/"+userID+"/count").set(count);
+		return text;
+
+	}
+	else if (message.indexOf("remove") === 1){
+		// remove item
+		database.ref("items/"+userID).once('value').then(function(snapshot) {
+			message = message.replace("add", "").trim();
+		var list = message.split(",");
+		});
+	}
+
 }
