@@ -300,7 +300,7 @@ function processText(userID, message, count) {
 	console.log("PROCESS TEXT FROM 11111!!!!");
 	// when status is idle
 	console.log(message);
-	if (message.indexOf("add") === 1){
+	if (message.indexOf("add") === 0){
 		console.log("PROCESS TEXT FROM 22222!!!!");
 		// add item/s
 		message = message.replace("add", "").trim();
@@ -340,7 +340,7 @@ function processText(userID, message, count) {
 		sendMessage(userID, msg);
 
 	}
-	else if (message.indexOf("remove") === 1){
+	else if (message.indexOf("remove") === 0){
 		console.log("PROCESS TEXT FROM 333333!!!!");
 		// remove item
 		database.ref("items/"+userID).once('value').then(function(snapshot) {
