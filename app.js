@@ -280,8 +280,8 @@ function processText(userID, message, count) {
 		var text = "";
 		for (item in list){
 			count += 1;
-			database.ref("items/"+userID).child(count).set(list[item]);
-			text += count.toString() + ". " + list[item] + "\n";
+			database.ref("items/"+userID).child(count).set(list[item].trim());
+			text += count.toString() + ". " + list[item].trim() + "\n";
 		}
 		database.ref("userData/"+userID+"/count").set(count);
 		var msg = {
@@ -322,15 +322,16 @@ function processText(userID, message, count) {
 					}
 				}
 			}
-			database.ref("userData/"+userID+"/count").set(count);
 			//now reorder the currentList
 			var index = 0;
 			var text = "";
+			var newList = [];
 			for (num in currentList){
 				index += 1;
-				currentList[index] = currentList[num];
+				newList[index] = currentList[num];
 				text += index.toString() + ". " + currentList[num] + "\n";
 			}
+			database.ref("userData/"+userID+"/count").set(index);
 			database.ref("items/"+userID).set(currentList);
 			var msg = {
 						text: text,
