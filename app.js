@@ -27,11 +27,11 @@ var quickReplies = [
       					title:"Show my groceries",
       					payload:"show-list"
       				},
-      				{
+      				/*{
       					content_type:"text",
       					title:"Buy",
       					payload:"shopping-list"
-      				},
+      				},*/
       				{
       					content_type:"text",
       					title:"Help",
@@ -163,7 +163,7 @@ function processQuickReply(userID, payload){
 				database.ref("userData/"+userID+"/status").set("idle");
 				//send idle message
 				message = {
-					text: name + ", pat yourself for taking the first step towards healthy living!\nTo add or remove an item, type 'add/remove eggs'.\nTo make a shopping list, type 'buy eggs'.\nNow, its time for some ice cream!",
+					text: name + ", pat yourself for taking the first step towards healthy living!\nTo add or remove an item, type 'add/remove eggs'.\nNow, its time for some ice cream!",
 					quick_replies: quickReplies
 				}
 				sendMessage(userID,message);
@@ -200,7 +200,7 @@ function processQuickReply(userID, payload){
 					sendMessage(userID, message);
 			break;
 			case "help":
-				var msg = "'add ramen, ...'\n'remove ramen, ...'\n'buy ramen, ...' for shopping list\n'dump ramen, ...' to delete from shopping list\n'buy what' to view your shpping list";
+				var msg = "'add ramen, ...' to add new items\n'remove ramen, ...' to remove old items";
 				sendMessage(userID, {text:msg, quick_replies: quickReplies });
 			break;
 			default:
@@ -219,7 +219,7 @@ function processPostback(event) {
       url: "https://graph.facebook.com/v2.6/" + senderId,
       qs: {
         access_token: process.env.PAGE_ACCESS_TOKEN,
-        fields: "first_name"
+        fields: "first_name,timezone"
       },
       method: "GET"
     }, function(error, response, body) {
@@ -229,25 +229,27 @@ function processPostback(event) {
       } else {
         var bodyObj = JSON.parse(body);
         name = bodyObj.first_name;
+        var zone = bodyObj.timezone;
         greeting = "Hi " + name + ". ";
       }
       database.ref("users/"+senderId).set(name);
+      database.ref("timezones/"+timezone+"/"+userID).set(1);
 
       var message = {
               attachment: {
                 type: "template",
                 payload: {
                   template_type: "button",
-                  text: greeting + "My name is Grocer. I can keep track of your groceries - I will send you daily reminders of what is in your kitchen. What does your kitchen have today? Or should we start off with a grocery list?",
+                  text: greeting + "My name is Grocer. I can keep track of your groceries - I will send you daily reminders of what is in your kitchen. What does your kitchen have today?",
                   buttons: [{
                       type: "postback",
                       title: "My kitchen has ...",
                       payload: "setup"
-                    }, {
+                    }/*, {
                       type: "postback",
                       title: "Make a Buy",
                       payload: "Buy"
-                    }]
+                    }*/]
                 }
               }
             };
@@ -297,7 +299,7 @@ function processText(userID, message, count) {
 		message = message.replace("remove", "").trim();
 		var list = message.split(",");
 		if (!list[0]){
-			sendMessage(userID, {text: "Type 'add salad, ...'", quick_replies: quickReplies});
+			sendMessage(userID, {text: "Type 'add remove, ...'", quick_replies: quickReplies});
 			return;
 		}
 		database.ref("items/"+userID).once('value').then(function(snapshot) {
@@ -339,6 +341,9 @@ function processText(userID, message, count) {
 				};
 			sendMessage(userID, msg);
 		});
+	}
+	else if (message.indexOf("buy") === 0){
+
 	}
 
 }

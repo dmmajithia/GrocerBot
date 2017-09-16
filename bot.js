@@ -16,6 +16,7 @@ exports.setup = function(userID) {
 	//first add state to data
 	database.ref("userData/"+userID+"/status/").set("setup");
 	database.ref("userData/"+userID+"/count/").set(0);
+	database.ref("items/"+userID).set();
 	return {
 			text: "Tell me what groceries are in your kitchen",
 			quick_replies:[
