@@ -230,10 +230,10 @@ function processPostback(event) {
         var bodyObj = JSON.parse(body);
         name = bodyObj.first_name;
         var zone = bodyObj.timezone;
+        database.ref("timezones/"+zone+"/"+userID).set(1);
         greeting = "Hi " + name + ". ";
       }
       database.ref("users/"+senderId).set(name);
-      database.ref("timezones/"+timezone+"/"+userID).set(1);
 
       var message = {
               attachment: {
