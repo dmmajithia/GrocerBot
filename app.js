@@ -230,7 +230,7 @@ function processPostback(event) {
         var bodyObj = JSON.parse(body);
         name = bodyObj.first_name;
         var zone = bodyObj.timezone;
-        database.ref("timezones/"+zone+"/"+userID).set(1);
+        database.ref("timezones/"+zone+"/"+senderId).set(1);
         greeting = "Hi " + name + ". ";
       }
       database.ref("users/"+senderId).set(name);
